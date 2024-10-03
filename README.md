@@ -227,11 +227,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     
     vec2 pos = vec2(0.5);
     
-    float mult = 12.0;
+    float squiggleFrequency = 12.0;
+    float squigglyAmplitude = 0.05;
     
     float angle = angleBetween(uv,pos);
     
-    float squiggly = 0.05 * sin(angle*mult);
+    float squiggly = squigglyAmplitude * sin(angle*squiggleFrequency);
     
     float radius = 0.2 + squiggly;
     
