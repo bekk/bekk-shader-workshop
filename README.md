@@ -55,7 +55,9 @@ Men nå skal du lage en gradient på skjermen.
 > Hvordan gjør man dette? Bruk UV vektoren! 🗣️🗣️🗣️
 
 Prøv å gjenskape dette bildet:
+
 ![UV Gradient](res/uv.png)
+
 ***Hint:*** *Se hvilke farger som er i hjørnene av skjermen*
 
 ### Løsningsforslag
@@ -150,8 +152,11 @@ Den enkle måten å fikse dette er en med vanlig *if/else* logikk. Dette vil gi 
 
 Men om du vil ha det litt penere, ved å kontrollere hvor blurry/skarp kanten din er, kan du bruke [smoothstep()](https://docs.gl/sl4/smoothstep) funksjonen. Denne tar inn to grenseverdier, og en kildeverdi x. funksjonen gjør alle x-verdier mindre enn nedre grense til 0, og alle x-verdier over øvre grense til 1. x-verdier innenfor grensene, vil smoothly interpoleres mellom 0 og 1.
 
-![Smoothstep](res/smoothstep.png)
-_Smoothstep funksjon hvor grenseveridene er 0 og 1_
+<figure>
+    <img src="res/smoothstep.png" alt="Smoothstep">
+    <figcaption><i>Smoothstep funksjon hvor grenseveridene er 0 og 1</i></figcaption>
+</figure>
+
 
 <details>
 <summary>Se Løsningsforslag</summary>
