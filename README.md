@@ -251,3 +251,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 }
 ```
 </details>
+
+# Del -1: Kreativitetens hjørne ✨
+## Oppgave ∞: DIY
+Nå er du ferdig med alle oppgavene, men du kan fortsatt gjøre mer! 🎉
+Fikk noen av disse oppgavene hjernen din til å tenke på en kul tanke? Lag det da vell!
+
+## Eksempler
+[eksempler fil her](EKSEMPLER.md)
