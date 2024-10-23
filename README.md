@@ -203,7 +203,7 @@ Denne verdien for seg selv kommer nok ikke til å vise noe super nyttig. Du kan 
 
 > NB: du kommer nok til å måtte skalere verdien din ned, enkel multiplisering med et tall mindre enn 1 vil holde 👍
 
-Du kan for eksempel bruke `u_time` variabelen som GLSL.app gir deg. Det er en float som sier hvor langt tid shaderen din har kjørt, i sekunder. 
+
 
 <details>
 <summary>Se Løsningsforslag</summary>
@@ -253,6 +253,8 @@ void main(){
 ## Oppgave ∞: DIY
 Nå er du ferdig med alle oppgavene, men du kan fortsatt gjøre mer! 🎉
 Fikk noen av disse oppgavene hjernen din til å tenke på en kul tanke? Lag det da vell!
+
+Du kan for eksempel bruke `u_time` variabelen som GLSL.app gir deg. Det er en float som sier hvor langt tid shaderen din har kjørt, i sekunder.
 
 Hvis du er litt lost for inspirasjon, så er det alltid gøy å putte inn f.eks. en `sin()` funksjon på et litt tilfeldig sted og se hva som skjer
 
