@@ -1,6 +1,8 @@
 # Eksempler
-Her er en liste av ting jeg har laget på fritiden. Typisk raskt* i løpet av en kveld.
+Her er en liste av ting jeg har laget på fritiden. Typisk ***raskt*** i løpet av en kveld.
 Mange av de er ganske uferdige
+
+Alle disse er laget i shadertoy, som er en annen online GLSL editor. Den er litt ustabil, så valgte å ikke bruke denne i dag
 * [Spiral-ting jeg lagde](https://www.shadertoy.com/view/dlySWw)
 
 ![alt text](res/spiral.png)

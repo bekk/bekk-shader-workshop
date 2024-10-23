@@ -2,28 +2,23 @@
 En workshop om shaderprogrammering
 
 # Del 0: Intro til Shaders
-[Link til ShaderToy](https://www.shadertoy.com/)
+[Link til GLSL.app](https://glsl.app/)
 
-ShaderToy er en nettside som lar deg lage og dele shaders skrevet i en web editor. Det er her vi skal løse oppgavene til workshopen.
+GLSL.app er en nettside som lar deg shaders i en web editor. Det er her vi skal løse oppgavene til workshopen.
 
-Det er ikke nødvendig å lage en bruker, men du vil ikke kunne lagre dine shaders uten.
-Opprett en ny shader ved å trykke på **New** oppe til høyre på nettsiden.
+Nettsiden vil lagre shadersene dine i cache, men lar deg laste den ned som en .glsl fil
 
-Her vil du se viewporten til venstre, og code editor til høyre.
+Opprett en ny shader ved å trykke på **New** oppe til venstre på nettsiden.
 
-`mainImage()` funksjonen er vår main funksjon som kalles automatisk.
+Viewporten vil er moveable og resizable
 
-`fragCoord` er en vektor som er posisjonen til pixelen vi skal beregne fargen til. Verdien dens er mellom 0 og størrelsen på viewport.
+`main()` funksjonen er vår main funksjon som kalles automatisk hver frame.
 
-`fragColor` er en innebygget `vec4` variabel som fungere i praksis som hele koden vår sin output. Denne representerer sluttfargen til fragmenten/pixelen vår.
-
-Allerede i koden definerer de 
-```
-vec2 uv = fragCoord / iResolution.xy;
-```
-Dette lager en vektor som går fra 0-1 i begge retninger.
-Det vil si at hvis uv er (0.5,0.5), da er vi i sentrum av skjermen. 
+`uv` er en vektor som er posisjonen til pixelen vi skal beregne fargen til. Dens størrelse er basert på pikselens posisjon i forhold til viewport, oog går fra 0-1. Det vil si at hvis uv er (0.5,0.5), da er vi i sentrum av skjermen. 
 > Origo (0,0) er nede til venstre
+
+
+`out_color` er en innebygget `vec4` variabel som fungere i praksis som hele koden vår sin output. Denne representerer sluttfargen til fragmenten/pixelen vår.
 
 # Del 1: Farger
 ## Oppgave 1.1: Farge 🎨
@@ -35,15 +30,15 @@ Prøv å sette hele skjermen til å være en farge. Du kan sette den til rød, e
 <summary>Se Løsningsforslag</summary>
 
 ```glsl
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = fragCoord/iResolution.xy;
+void main(){
+    vec2 st = (2. * uv - 1.) * vec2(u_resolution.x / u_resolution.y, 1.);
 
-    vec3 col = vec3(0.145,0.239,0.192);
-
-    // Output to screen
-    fragColor = vec4(col,1.0);
+    vec2 mouse = u_mouse.xy / u_resolution;
+    vec3 red = vec3(1,0,0);
+    out_color = vec4(
+        red,
+        1.
+    );
 }
 ```
 </details>
@@ -65,15 +60,16 @@ Prøv å gjenskape dette bildet:
 <summary>Se Løsningsforslag</summary>
 
 ```glsl
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = fragCoord/iResolution.xy;
+void main(){
+    vec2 st = (2. * uv - 1.) * vec2(u_resolution.x / u_resolution.y, 1.);
+    vec2 mouse = u_mouse.xy / u_resolution;
 
-    vec3 col = vec3(uv.xy,.0);
+    vec3 col = vec3(uv,0);
 
-    // Output to screen
-    fragColor = vec4(col,1.0);
+    out_color = vec4(
+        col,
+        1.
+    );
 }
 ```
 </details>
@@ -90,27 +86,30 @@ Deretter bruk mix() til å gjøre at du får en stilig gradient av fargene dine 
 <summary>Se Løsningsforslag</summary>
 
 ```glsl
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = fragCoord/iResolution.xy;
+void main(){
+    vec3 magenta = vec3(1,0,1);
+    vec3 cyan = vec3(0,1,1);
+    
+    vec3 col = mix(magenta,cyan,uv.x);
 
-    vec3 color1 = vec3(1,0,1);
-    vec3 color2 = vec3(0,1,1);
-    vec3 col = mix(color1,color2,uv.x);
-
-    // Output to screen
-    fragColor = vec4(col,1.0);
+    out_color = vec4(
+        col,
+        1.
+    );
 }
 ```
 </details>
 
 ## Oppgave 1.4: Bilder
+<!-- TODO fiks oppgave tekst  -->
 Nå skal sample en texture inn i shaderen vår.
-
 Først må vi velge et bilde å laste inn
 
-Trykk på iChannel0 under editoren din, deretter trykk på Textures, så velger du en av bildene.
+Trykk på Textures over editoren din, her kan du legge inn et bilde du ønsker å bruke. som f.eks. dette flotte bildet av verdens beste by:
+<figure>
+    <img src="res/bergen.jpg" alt="Smoothstep" width=600>
+    <figcaption><i>Shaderen din blir 1000 ganger bedre med så flott bilde!</i></figcaption>
+</figure>
 
 Nå kan vi sample bildet inn i shaderen ved å bruke [texture()](https://registry.khronos.org/OpenGL-Refpages/gl4/html/texture.xhtml)
 hvor `iChannel0` er sampleren vår.
@@ -119,15 +118,13 @@ hvor `iChannel0` er sampleren vår.
 <summary>Se Løsningsforslag</summary>
 
 ```glsl
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = fragCoord/iResolution.xy;
+void main(){
+    vec3 col = texture(u_textures[0], uv).rgb;
 
-    vec3 col = texture(iChannel0, uv).rgb;
-
-    // Output to screen
-    fragColor = vec4(col,1.0);
+    out_color = vec4(
+        col,
+        1.
+    );
 }
 ```
 </details>
@@ -150,7 +147,7 @@ Hvis du bruker denne distansen til sirkelen din, vil du få en ganske blurry sir
 
 Den enkle måten å fikse dette er en med vanlig *if/else* logikk. Dette vil gi deg en superskarp kant på sirkelen din, men her vil du mulig møte på litt [aliasing](https://en.wikipedia.org/wiki/Aliasing), altså at den blir litt pikselert-ish.
 
-Men om du vil ha det litt penere, ved å kontrollere hvor blurry/skarp kanten din er, kan du bruke [smoothstep()](https://docs.gl/sl4/smoothstep) funksjonen. Denne tar inn to grenseverdier, og en kildeverdi x. funksjonen gjør alle x-verdier mindre enn nedre grense til 0, og alle x-verdier over øvre grense til 1. x-verdier innenfor grensene, vil smoothly interpoleres mellom 0 og 1.
+Men om du vil ha det litt penere, ved å kontrollere hvor blurry/skarp kanten din er, kan du bruke [smoothstep()](https://docs.gl/sl4/smoothstep) funksjonen i steden for *if/else*. Denne tar inn to grenseverdier, og en kildeverdi x. funksjonen gjør alle x-verdier mindre enn nedre grense til 0, og alle x-verdier over øvre grense til 1. x-verdier innenfor grensene, vil smoothly interpoleres mellom 0 og 1.
 
 <figure>
     <img src="res/smoothstep.png" alt="Smoothstep">
@@ -166,11 +163,7 @@ float circleDist(vec2 uv, vec2 center, float radius){
     return length(center-uv) - radius;
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = fragCoord/iResolution.xy;
-    
+void main(){
     vec2 pos = vec2(0.5);
     
     float radius = 0.2;
@@ -178,9 +171,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     float dist = circleDist(uv,pos,radius);
 
     vec3 col = vec3(smoothstep(.0,.0001,dist));
-    
-    // Output to screen
-    fragColor = vec4(col,1.0);
+
+    out_color = vec4(
+        col,
+        1.
+    );
 }
 ```
 </details>
@@ -191,6 +186,10 @@ Nå som du har en fin sirkel på skjermen din, kan du jo ha det litt gøy med de
 Om du endrer på radius variabelen til noe mer dynamisk, kan du gjøre mye artig.
 
 Hva om du vil ha en ruglete sirkel? Da kan du bruke vinkelen mellom senter av sirkelen og uv vektoren din
+<figure>
+    <img src="res/squiggly.png" alt="Squiggle Circle" width=400>
+    <figcaption>Dette er det jeg mener med en <i>Ruglete Sirkel</i></figcaption>
+</figure>
 
 Her er en hjelpe funksjon jeg har laget for deg (Takk Tines!), den regner ut vinkelen for deg.
 ```glsl
@@ -204,27 +203,23 @@ Denne verdien for seg selv kommer nok ikke til å vise noe super nyttig. Du kan 
 
 > NB: du kommer nok til å måtte skalere verdien din ned, enkel multiplisering med et tall mindre enn 1 vil holde 👍
 
-Du kan for eksempel bruke `iTime` variabelen som ShaderToy gir deg. Det er en float som sier hvor langt tid shaderen din har kjørt, i sekunder. 
+Du kan for eksempel bruke `u_time` variabelen som GLSL.app gir deg. Det er en float som sier hvor langt tid shaderen din har kjørt, i sekunder. 
 
 <details>
 <summary>Se Løsningsforslag</summary>
 
 ```glsl
-float circleDist(vec2 uv, vec2 center, float radius){
-    return length(center-uv) - radius;
-}
-
 float angleBetween(vec2 uv, vec2 pos){
     vec2 relPos = uv-pos;
     float angle = atan(relPos.y, relPos.x);
     return angle;
 }
 
-void mainImage( out vec4 fragColor, in vec2 fragCoord )
-{
-    // Normalized pixel coordinates (from 0 to 1)
-    vec2 uv = fragCoord/iResolution.xy;
-    
+float circleDist(vec2 uv, vec2 center, float radius){
+    return length(center-uv) - radius;
+}
+
+void main(){
     vec2 pos = vec2(0.5);
     
     float squiggleFrequency = 12.0;
@@ -245,9 +240,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 col2 = vec3(0,1,1);
 
     vec3 col = mix(col1,col2,thresh);
-    
-    // Output to screen
-    fragColor = vec4(col,1.0);
+
+    out_color = vec4(
+        col,
+        1.
+    );
 }
 ```
 </details>
@@ -257,5 +254,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 Nå er du ferdig med alle oppgavene, men du kan fortsatt gjøre mer! 🎉
 Fikk noen av disse oppgavene hjernen din til å tenke på en kul tanke? Lag det da vell!
 
+Hvis du er litt lost for inspirasjon, så er det alltid gøy å putte inn f.eks. en `sin()` funksjon på et litt tilfeldig sted og se hva som skjer
+
+## Resurser
+[*Signed Distance Functions*](https://iquilezles.org/articles/distfunctions2d/): Liste med masse ulike signed distance functions som du kan bruke
+
+[*Noise Texture Generator*](https://www.noisetexturegenerator.com/): Lar deg lage litt mer avansert noise teksturer
+
 ## Eksempler
-[eksempler fil her](EKSEMPLER.md)
+[Her er en liten liste med shaders jeg har laget på fritiden](EKSEMPLER.md)
