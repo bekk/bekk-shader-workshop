@@ -51,9 +51,12 @@ Men nå skal du lage en gradient på skjermen.
 
 Prøv å gjenskape dette bildet:
 
-![UV Gradient](res/uv.png)
+<figure>
+    <img src="res/uv.png" alt="UV gradient" width=400>
+    <figcaption><b>Hint:</b><i> Se hvilke farger som er i hjørnene av bildet</i></figcaption>
+</figure>
 
-***Hint:*** *Se hvilke farger som er i hjørnene av skjermen*
+
 
 ### Løsningsforslag
 <details>
@@ -150,7 +153,7 @@ Den enkle måten å fikse dette er en med vanlig *if/else* logikk. Dette vil gi 
 Men om du vil ha det litt penere, ved å kontrollere hvor blurry/skarp kanten din er, kan du bruke [smoothstep()](https://docs.gl/sl4/smoothstep) funksjonen i steden for *if/else*. Denne tar inn to grenseverdier, og en kildeverdi x. funksjonen gjør alle x-verdier mindre enn nedre grense til 0, og alle x-verdier over øvre grense til 1. x-verdier innenfor grensene, vil smoothly interpoleres mellom 0 og 1.
 
 <figure>
-    <img src="res/smoothstep.png" alt="Smoothstep">
+    <img src="res/smoothstep.png" alt="Smoothstep" width=500>
     <figcaption><i>Smoothstep funksjon hvor grenseveridene er 0 og 1</i></figcaption>
 </figure>
 
@@ -258,10 +261,18 @@ Du kan for eksempel bruke `u_time` variabelen som GLSL.app gir deg. Det er en fl
 
 Hvis du er litt lost for inspirasjon, så er det alltid gøy å putte inn f.eks. en `sin()` funksjon på et litt tilfeldig sted og se hva som skjer
 
+Hvis du trenger en `random` så finnes ikke det som en innbygget funksjon i GLSL, *men* du kan bruke en noise texture for random, slik som dette:
+
+<figure>
+    <img src="res/noise.png" alt="Noise Texture" width=400>
+    <figcaption><i>Noise texture, hvor hver pixel er mellom 0-1</i></figcaption>
+</figure>
+
+
 ## Resurser
 [*Signed Distance Functions*](https://iquilezles.org/articles/distfunctions2d/): Liste med masse ulike signed distance functions som du kan bruke
 
-[*Noise Texture Generator*](https://www.noisetexturegenerator.com/): Lar deg lage litt mer avansert noise teksturer
+[*Noise Texture Generator*](https://www.noisetexturegenerator.com/): Lar deg lage litt mer avansert noise textures
 
 ## Eksempler
 [Her er en liten liste med shaders jeg har laget på fritiden](EKSEMPLER.md)
