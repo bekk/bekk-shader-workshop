@@ -115,7 +115,7 @@ Trykk på Textures over editoren din, her kan du legge inn et bilde du ønsker �
 </figure>
 
 Nå kan vi sample bildet inn i shaderen ved å bruke [texture()](https://registry.khronos.org/OpenGL-Refpages/gl4/html/texture.xhtml)
-hvor `iChannel0` er sampleren vår.
+hvor `u_textures` er sampleren vår.
 
 <details>
 <summary>Se Løsningsforslag</summary>
